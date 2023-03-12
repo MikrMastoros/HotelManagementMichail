@@ -60,7 +60,7 @@ namespace HotelManagementMike
         private void button3_Click(object sender, EventArgs e)
         {
             MainMenu secondForm = new MainMenu();
-            this.Hide();
+            this.Dispose();
             secondForm.Show();
         }
 

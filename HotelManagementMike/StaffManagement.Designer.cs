@@ -40,10 +40,9 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.RemoveBox = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.RemoveBox = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -60,12 +59,12 @@
             this.dataGridView1.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.AllCells;
             this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ButtonHighlight;
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Location = new System.Drawing.Point(12, 137);
+            this.dataGridView1.Location = new System.Drawing.Point(12, 122);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders;
             this.dataGridView1.RowTemplate.Height = 24;
-            this.dataGridView1.Size = new System.Drawing.Size(776, 272);
+            this.dataGridView1.Size = new System.Drawing.Size(776, 357);
             this.dataGridView1.TabIndex = 0;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
             // 
@@ -130,25 +129,27 @@
             // Remove
             // 
             this.Remove.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.Remove.Location = new System.Drawing.Point(394, 415);
+            this.Remove.BackColor = System.Drawing.Color.Red;
+            this.Remove.Location = new System.Drawing.Point(401, 485);
             this.Remove.MaximumSize = new System.Drawing.Size(75, 23);
             this.Remove.Name = "Remove";
             this.Remove.Size = new System.Drawing.Size(75, 23);
             this.Remove.TabIndex = 7;
             this.Remove.Text = "Remove";
-            this.Remove.UseVisualStyleBackColor = true;
+            this.Remove.UseVisualStyleBackColor = false;
             this.Remove.Click += new System.EventHandler(this.RemoveBox_Click);
             // 
             // button1
             // 
             this.button1.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.button1.BackColor = System.Drawing.Color.Lime;
             this.button1.Location = new System.Drawing.Point(362, 99);
             this.button1.MaximumSize = new System.Drawing.Size(75, 23);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 5;
             this.button1.Text = "Add";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // label1
@@ -171,18 +172,10 @@
             this.label3.TabIndex = 10;
             this.label3.Text = "Password";
             // 
-            // RemoveBox
-            // 
-            this.RemoveBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.RemoveBox.Location = new System.Drawing.Point(284, 415);
-            this.RemoveBox.Name = "RemoveBox";
-            this.RemoveBox.Size = new System.Drawing.Size(100, 22);
-            this.RemoveBox.TabIndex = 6;
-            // 
             // button3
             // 
             this.button3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button3.Location = new System.Drawing.Point(12, 415);
+            this.button3.Location = new System.Drawing.Point(12, 485);
             this.button3.MaximumSize = new System.Drawing.Size(100, 23);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(100, 23);
@@ -194,7 +187,7 @@
             // button4
             // 
             this.button4.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button4.Location = new System.Drawing.Point(713, 415);
+            this.button4.Location = new System.Drawing.Point(713, 485);
             this.button4.MaximumSize = new System.Drawing.Size(75, 23);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(75, 23);
@@ -203,16 +196,13 @@
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // groupBox1
+            // RemoveBox
             // 
-            this.groupBox1.AutoSize = true;
-            this.groupBox1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.groupBox1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.groupBox1.Location = new System.Drawing.Point(0, 445);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(800, 5);
-            this.groupBox1.TabIndex = 15;
-            this.groupBox1.TabStop = false;
+            this.RemoveBox.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.RemoveBox.Location = new System.Drawing.Point(295, 486);
+            this.RemoveBox.Name = "RemoveBox";
+            this.RemoveBox.Size = new System.Drawing.Size(100, 22);
+            this.RemoveBox.TabIndex = 11;
             // 
             // StaffManagement
             // 
@@ -220,12 +210,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("$this.BackgroundImage")));
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 520);
+            this.Controls.Add(this.RemoveBox);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.RemoveBox);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
@@ -260,9 +249,8 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox RemoveBox;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.TextBox RemoveBox;
     }
 }

@@ -16,25 +16,26 @@ namespace HotelManagementMike
         {
             InitializeComponent();
         }
-
+        //Client Menu Button - redirects to client menu form
         private void button2_Click(object sender, EventArgs e)
         {
             ClientForm secondForm = new ClientForm();
-            this.Hide();
+            this.Dispose();
             secondForm.Show();
         }
-
+        
+        //Room Menu Button - redirects to room menu form
         private void button1_Click(object sender, EventArgs e)
         {
             RoomManagement secondForm = new RoomManagement();
-            this.Hide();
+            this.Dispose();
             secondForm.Show();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             StaffManagement secondForm = new StaffManagement();
-            this.Hide();
+            this.Dispose();
             secondForm.Show();
         }
 

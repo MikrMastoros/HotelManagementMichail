@@ -71,7 +71,7 @@ namespace HotelManagementMike
                 Connection = new MySqlConnection(connectionString);
                 //Opens connection
                 Connection.Open();
-                MessageBox.Show("Now Open!");
+                MessageBox.Show("Now running!");
 
             }
             else
@@ -101,11 +101,10 @@ namespace HotelManagementMike
 
                 if (LoginFlag == 1)
                 {
-                    MessageBox.Show("Logged in Successfully");
-                    //Hide form 1(login screen)
-                    this.Hide();
+                    MessageBox.Show("Logged in Successfully");   
                     //open and show the main menu form
                     MainMenu thirdForm = new MainMenu();
+                    this.Hide();
                     thirdForm.Show();
                 }
                 else
@@ -174,8 +173,8 @@ namespace HotelManagementMike
                 {
                     MessageBox.Show("Logged in Successfully");
                     //Hide Login Screen
-                    this.Hide();
                     StaffManagement.Show();
+                    this.Hide();    
                 }
                 else
                 {

@@ -233,20 +233,25 @@ namespace HotelManagementMike
         private void button2_Click(object sender, EventArgs e)
         {
             ClientForm secondForm = new ClientForm();
-            this.Hide();
+            this.Close();
             secondForm.Show();
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
             MainMenu secondForm = new MainMenu();
-            this.Hide();
             secondForm.Show();
+             this.Close();
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
             Application.Exit();
+
+        }
+
+        private void groupBox1_Enter(object sender, EventArgs e)
+        {
 
         }
     }

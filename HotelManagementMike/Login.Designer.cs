@@ -161,12 +161,13 @@
             // 
             this.ExitBTN.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.ExitBTN.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            this.ExitBTN.BackColor = System.Drawing.Color.Red;
             this.ExitBTN.Location = new System.Drawing.Point(796, 115);
             this.ExitBTN.Name = "ExitBTN";
             this.ExitBTN.Size = new System.Drawing.Size(80, 25);
             this.ExitBTN.TabIndex = 5;
             this.ExitBTN.Text = "Exit";
-            this.ExitBTN.UseVisualStyleBackColor = true;
+            this.ExitBTN.UseVisualStyleBackColor = false;
             this.ExitBTN.Click += new System.EventHandler(this.ExitBTN_Click);
             // 
             // Login
