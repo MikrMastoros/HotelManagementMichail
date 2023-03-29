@@ -59,9 +59,12 @@ namespace HotelManagementMike
 
         private void button3_Click(object sender, EventArgs e)
         {
-            MainMenu secondForm = new MainMenu();
-            this.Dispose();
-            secondForm.Show();
+            using (MainMenu secondForm = new MainMenu())
+            {
+                this.Hide();
+                secondForm.ShowDialog();
+                this.Close();
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -153,75 +156,63 @@ namespace HotelManagementMike
 
         private void button4_Click(object sender, EventArgs e)
         {
-
+            try
             {
-                //NOTE: Here we want to disable the ID box, as we will never change it only see it,
-                //so we dont need to check it for content in the IF, NOR send info to the database.
-                if ((FirstNameBox.Text == "") || (RoomNBox.Text == "") || (RoomTBox.Text == "") || (PriceBox.Text == ""))
+                // Check if all fields are filled
+                if (string.IsNullOrEmpty(FirstNameBox.Text) || string.IsNullOrEmpty(RoomNBox.Text) || string.IsNullOrEmpty(RoomTBox.Text) || string.IsNullOrEmpty(PriceBox.Text))
                 {
                     MessageBox.Show("Please enter data in all boxes!");
+                    return;
                 }
-                else
+
+                // Set up the server name and login details.
+                string connectionString = $"Data Source={server};Initial Catalog={database};User ID={UserName};Password={Password}";
+
+                // Set the query to write
+                // Don't need to ADD ID, it's automatically added.
+                string query = "INSERT INTO HotelMike.ROOMS (OCCUPANT, ROOMNUMBER, SIZE, PRICE) VALUES (@Occupant, @RoomNumber, @Size, @Price)";
+
+                // Set up connection to write to DB
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                // Add parameters to the command
+                command.Parameters.AddWithValue("@Occupant", FirstNameBox.Text);
+                command.Parameters.AddWithValue("@RoomNumber", RoomNBox.Text);
+                command.Parameters.AddWithValue("@Size", RoomTBox.Text);
+                command.Parameters.AddWithValue("@Price", PriceBox.Text);
+
+                // Open the connection and execute the query
+                try
                 {
-                    try
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Updated Successfully");
+                }
+                catch (MySqlException ex)
+                {
+                    if (ex.Number == 1062) // MySQL error number for duplicate key violation
                     {
-                        //Set up the server name and login details.
-                        connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-
-                        //Set the query to write
-                        //Dont need to ADD ID, its automatically added.
-                        string Query = "insert into HotelMike.ROOMS(OCCUPANT,ROOMNUMBER,SIZE,PRICE) values('" + this.FirstNameBox.Text + "','" + this.RoomNBox.Text + "','" + this.RoomTBox.Text + "','" + this.PriceBox.Text + "'); ";
-
-                        //Set up connection to write to DB
-                        MySqlConnection MyConnection2 = new MySqlConnection(connectionString);
-
-                        //Sort out the connection object
-                        MySqlCommand MyCommandConnection = new MySqlCommand(Query, MyConnection2);
-
-                        //Sort out the reader to write to the DB
-                        MySqlDataReader MyReader2;
-
-                        //Open the reader connection.
-                        MyConnection2.Open();
-
-                        //Execute reader.
-                        MyReader2 = MyCommandConnection.ExecuteReader();
-
-                        MessageBox.Show("Updated Succesfully");
-
-                        //Read in data.
-                        while (MyReader2.Read())
-                        {
-                        }
-                        MyConnection2.Close();
+                        MessageBox.Show("Another occupant already has this room. Please choose a different room.");
                     }
-                    catch (Exception ex)
+                    else
                     {
                         MessageBox.Show(ex.Message);
                     }
                 }
-                if (Connection.State != ConnectionState.Open)
-                {
-                    //Setup db
-                    connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-                    //Makes connection
-                    Connection = new MySqlConnection(connectionString);
-                    //Opens connection
-                    Connection.Open();
-                }
 
-                //Sets up command for mysql
-                MySqlCommand cmd = Connection.CreateCommand();
-                cmd.CommandText = "SELECT * FROM ROOMS";
-                MySqlDataAdapter adap = new MySqlDataAdapter(cmd);
-                //Puts into a table.
-                DataSet ds = new DataSet();
-                adap.Fill(ds);
-                //Creates a new datagidview object.
-                //DataGridView dataGridView1 = new DataGridView();
-                dataGridView1.DataSource = ds.Tables[0].DefaultView;
-                DataGridView grid = new DataGridView();
-                grid.DataSource = grid;
+                // Read in data
+                using MySqlCommand cmd = new MySqlCommand("SELECT * FROM ROOMS", connection);
+                using MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                using DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet);
+
+                // Set the DataGridView's data source
+                dataGridView1.DataSource = dataSet.Tables[0].DefaultView;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
     }

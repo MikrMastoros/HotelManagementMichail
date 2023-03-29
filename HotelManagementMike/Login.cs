@@ -90,7 +90,6 @@ namespace HotelManagementMike
                 //READS IN THE ENTIRE DB
                 while (reader.Read())
                 {
-                    //Variables
                     USERNAME = reader.GetString("LogUserName");
                     PASSWORD = reader.GetString("LogPassword");
 
@@ -102,7 +101,7 @@ namespace HotelManagementMike
                 if (LoginFlag == 1)
                 {
                     MessageBox.Show("Logged in Successfully");   
-                    //open and show the main menu form
+                    //opens and shows the main menu form
                     MainMenu thirdForm = new MainMenu();
                     this.Hide();
                     thirdForm.Show();

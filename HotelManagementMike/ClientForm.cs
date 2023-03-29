@@ -78,6 +78,8 @@ namespace HotelManagementMike
             RoomBox.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
             PaidBox.Text = dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString();
             RemoveBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+
+
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -94,52 +96,85 @@ namespace HotelManagementMike
 
         private void button2_Click(object sender, EventArgs e)
         {
+            try
             {
-                if ((NameBox.Text == "") || (LastNameBox.Text == "") || (MobileBox.Text == "") || (textBoxRoomType.Text == "") || (RoomBox.Text == ""))
+                // Check if all fields are filled
+                if (string.IsNullOrEmpty(NameBox.Text) || string.IsNullOrEmpty(LastNameBox.Text) || string.IsNullOrEmpty(MobileBox.Text) || string.IsNullOrEmpty(textBoxRoomType.Text) || string.IsNullOrWhiteSpace(RoomBox.Text))
                 {
-                    MessageBox.Show("Please enter data in ALL boxes!");
+                    MessageBox.Show("Please enter data in all boxes!");
+                    return;
                 }
-                else
-                {
 
-                    try
+                // Set up the server name and login details.
+                string connectionString = $"Data Source={server};Initial Catalog={database};User ID={UserName};Password={Password}";
+
+                // Set the query to write
+                // Don't need to ADD ID, it's automatically added.
+                string query = "INSERT INTO HotelMike.CLIENTS (FirstName, LastName, Mobile, ROOMNUMBER, PAID, SIZE) VALUES (@FirstName, @LastName, @Mobile, @RoomNumber, @Paid, @Size)";
+
+                // Set up connection to write to DB
+                using MySqlConnection connection = new MySqlConnection(connectionString);
+                using MySqlCommand command = new MySqlCommand(query, connection);
+
+                // Add parameters to the command
+                command.Parameters.AddWithValue("@FirstName", NameBox.Text);
+                command.Parameters.AddWithValue("@LastName", LastNameBox.Text);
+                command.Parameters.AddWithValue("@Mobile", MobileBox.Text);
+                command.Parameters.AddWithValue("@RoomNumber", RoomBox.Text);
+                command.Parameters.AddWithValue("@Paid", PaidBox.Text);
+                command.Parameters.AddWithValue("@Size", textBoxRoomType.Text);
+
+                // Open the connection and execute the query
+                try
+                {
+                    connection.Open();
+                    command.ExecuteNonQuery();
+                    MessageBox.Show("Updated Successfully");
+                }
+                catch (MySqlException ex)
+                {
+                    if (ex.Number == 1062) // MySQL error number for duplicate key violation
                     {
-                        connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-                        string Query = "Insert into HotelMike.CLIENTS(FirstName,LastName,Mobile,ROOM,PAID,SIZE)values('" + NameBox.Text + "','" + LastNameBox.Text + "','" + MobileBox.Text + "','" + RoomBox.Text + "','" + PaidBox.Text + "','" + textBoxRoomType.Text + "')";
-                        MySqlConnection MyConnection2 = new MySqlConnection(connectionString);
-                        MySqlCommand MyCommandConnection = new MySqlCommand(Query, MyConnection2);
-                        MySqlDataReader MyReader2;
-                        MyConnection2.Open();
-                        MyReader2 = MyCommandConnection.ExecuteReader();
-                        MessageBox.Show("New record successfully written!");
-                        while (MyReader2.Read())
-                        {
-                        }
-                        MyConnection2.Close();
+                        MessageBox.Show("Another occupant already has this room. Please choose a different room.");
                     }
-                    catch (Exception ex)
+                    else
                     {
                         MessageBox.Show(ex.Message);
                     }
                 }
+
+                // Read in data
+                using MySqlCommand cmd = new MySqlCommand("SELECT * FROM CLIENTS", connection);
+                using MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
+                using DataSet dataSet = new DataSet();
+                adapter.Fill(dataSet);
+
+                // Set the DataGridView's data source
+                dataGridView1.DataSource = dataSet.Tables[0].DefaultView;
             }
-            if (Connection.State != ConnectionState.Open)
+            catch (Exception ex)
             {
-                connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-                Connection = new MySqlConnection(connectionString);
-                Connection.Open();
+                MessageBox.Show(ex.Message);
+            }
+        }
 
+        private void RefreshDataGridView()
+        {
+            using (var connection = new MySqlConnection(connectionString))
+            {
+                var query = "SELECT * FROM CLIENTS";
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    using (var adapter = new MySqlDataAdapter(command))
+                    {
+                        var dataTable = new DataTable();
+                        adapter.Fill(dataTable);
+                        dataGridView1.DataSource = dataTable;
+                    }
+                }
+            }
 
             }
-            MySqlCommand cmd = Connection.CreateCommand();
-            cmd.CommandText = "SELECT * FROM CLIENTS";
-            MySqlDataAdapter adap = new MySqlDataAdapter(cmd);
-            DataSet ds = new DataSet();
-            adap.Fill(ds);
-            dataGridView1.DataSource = ds.Tables[0].DefaultView;
-            DataGridView grid = new DataGridView();
-            grid.DataSource = grid;
-        }
 
         private void PaidBox_CheckedChanged_1(object sender, EventArgs e)
         {
@@ -148,10 +183,12 @@ namespace HotelManagementMike
             if (PaidBox.Checked)
             {
                 PaidBox.Text = "Paid";
+                PaidBox.Checked = true;
             }
             else
             {
                 PaidBox.Text = "Unpaid";
+                PaidBox.Checked = false;
 
             }
         }
