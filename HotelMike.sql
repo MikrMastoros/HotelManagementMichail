@@ -1,47 +1,59 @@
-drop DATABASE if exists HotelMike;
-create database HotelMike;
- 
-use HotelMike;
- 
-create table CLIENTS
-(
-Clientid INT NOT NULL AUTO_INCREMENT,
-Staffid INT,
-FirstName VARCHAR(30),
-LastName VARCHAR(30),
-Mobile BIGINT,
-ROOM INT,
-PAID VARCHAR(30),
-SIZE VARCHAR(30),
-PRIMARY KEY(Clientid),
-FOREIGN KEY(Staffid) REFERENCES Staff(Staffid)
+-- Drop the database if it already exists
+DROP DATABASE IF EXISTS HotelMike;
+
+-- Create a new database
+CREATE DATABASE HotelMike;
+
+-- Select the newly created database
+USE HotelMike;
+
+-- Create a table for rooms
+CREATE TABLE ROOMS(
+    RoomID INT NOT NULL AUTO_INCREMENT,
+    RoomNumber INT,
+    SIZE VARCHAR(30) NOT NULL,
+    PRIMARY KEY(RoomID)
 );
 
- INSERT INTO CLIENTS VALUES (null,'1','Michalis','Mastoros','6948798568','22','Paid','Suite');
- 
-create table STAFF
-(
-Staffid INT NOT NULL AUTO_INCREMENT,
-LogUserName VARCHAR(30),
-LogPassword VARCHAR(30),
-FirstName VARCHAR(30),
-LastName VARCHAR(30),
-PRIMARY KEY(Staffid)
+-- Create a table for clients
+CREATE TABLE Clients(
+    ClientID INT NOT NULL AUTO_INCREMENT,
+    ReservationID INT,
+    FirstName VARCHAR(30) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+    RoomNumber VARCHAR(30),
+    Mobile BIGINT,
+    PRIMARY KEY(ClientID),
+    FOREIGN KEY(ReservationID) REFERENCES RESERVATIONS(ReservationID)
 );
  
-INSERT INTO STAFF VALUES (null,'1','1','Michail','Mastoros');
- 
- create table ROOMS
-(
-ROOMid INT NOT NULL AUTO_INCREMENT,
-Clientid INT,
-OCCUPANT VARCHAR(30),
-ROOMNUMBER SMALLINT,
-PRICE INT,
-SIZE VARCHAR(30),
-PRIMARY KEY(ROOMid),
-FOREIGN KEY(Clientid) REFERENCES CLIENTS(Clientid)
+-- Create a table for reservations
+CREATE TABLE RESERVATIONS(
+    ReservationID INT NOT NULL AUTO_INCREMENT,
+    ClientID INT NOT NULL,
+    CheckInDate VARCHAR(30) NOT NULL,
+    CheckOutDate VARCHAR(30) NOT NULL,
+    PRIMARY KEY (ReservationID),
+    FOREIGN KEY (ClientID) REFERENCES Clients(ClientID)
 );
-SELECT * FROM CLIENTS;
-SELECT * FROM STAFF;
-SELECT * FROM ROOMS;
+
+-- Create a table for staff
+CREATE TABLE Staff(
+    StaffID INT NOT NULL AUTO_INCREMENT,
+    LogUserName VARCHAR(30) NOT NULL,
+    LogPassword VARCHAR(30) NOT NULL,
+    FirstName VARCHAR(30) NOT NULL,
+    LastName VARCHAR(30) NOT NULL,
+    PRIMARY KEY(StaffID)
+);
+
+-- Insert a staff member
+INSERT INTO Staff (LogUserName, LogPassword, FirstName, LastName) 
+VALUES ('m', 'm', 'Mike', 'Mastoros');
+
+-- Grant privileges to the user
+GRANT ALL PRIVILEGES ON HotelMike.* TO 'm'@'localhost' IDENTIFIED BY 'm';
+
+-- Refresh privileges
+FLUSH PRIVILEGES;
+
