@@ -1,9 +1,9 @@
 # HotelManagementMichail
-This is my Undergraduate Thesis for College
+This is my Undergraduate Thesis for University
 To Use:
-1. Put code in VS 
-2. Dowload Wamp Server and open it
+1. Download Files set up in Visual Studio with windows forms
+2. Dowload Wamp Server and run it
 3. Open Toad for MySQL and insert mysql code
-4. Connect Toad by clicking connect
+4. Connect Toad by clicking connect/ default credentials(can be changed in code)
 5. Run code in VS 
-6. Project is running now
+6. Project is now running
