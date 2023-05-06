@@ -16,7 +16,7 @@ namespace HotelManagementMike
     public partial class StaffManagement : Form
     {
         //VARIABLES FOR DB CONNECTION
-        RoomManagement forthForm = new RoomManagement();
+        ReservationsManagement forthForm = new ReservationsManagement();
         private string server = "localhost";
         private string database = "HotelMike";
         private string UserName = "root";
@@ -27,26 +27,7 @@ namespace HotelManagementMike
         public StaffManagement()
         {
             InitializeComponent();
-        }
-
-        private void MakeInitialConnection()
-        {
-            //Setup db
-            connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-            //Makes connection
-            Connection = new MySqlConnection(connectionString);
-            //Opens connection
-            Connection.Open();
-
-            if (Connection.State == ConnectionState.Open)
-            {
-                //MessageBox.Show("Connection Healthy!");
-                Connection.Close();
-            }
-            else
-                MessageBox.Show("Connection is NOT healthy, could not connect to server!");
-        }
-
+        }      
         private void StaffManagement_Load(object sender, EventArgs e)
         {
             {
@@ -95,7 +76,6 @@ namespace HotelManagementMike
                 }
                 else
                 {
-
                     try
                     {
                         //Set up the server name and login details.
@@ -143,8 +123,6 @@ namespace HotelManagementMike
                 Connection = new MySqlConnection(connectionString);
                 //Opens connection
                 Connection.Open();
-
-
             }
 
             //Sets up command for mysql
@@ -227,31 +205,16 @@ namespace HotelManagementMike
                 {
                     MessageBox.Show(ex.Message);
                 }
-
         }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            ClientForm secondForm = new ClientForm();
-            this.Close();
-            secondForm.Show();
-        }
-
         private void button3_Click(object sender, EventArgs e)
         {
             MainMenu secondForm = new MainMenu();
             secondForm.Show();
              this.Close();
         }
-
         private void button4_Click(object sender, EventArgs e)
         {
             Application.Exit();
-
-        }
-
-        private void groupBox1_Enter(object sender, EventArgs e)
-        {
 
         }
     }

@@ -1,203 +1,159 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using MySql.Data.MySqlClient;
-using System.Data.SqlClient;
-using HotelManagementMike;
 
 namespace HotelManagementMike
 {
     public partial class Login : Form
     {
-        StaffManagement StaffManagement = new StaffManagement();
         private string server = "localhost";
         private string database = "HotelMike";
-        private string UserName = "root";
-        private string Password = "";
-        //Makes connection to MYSQL
-        string connectionString;
-        MySqlConnection Connection;
+        private string username = "root";
+        private string password = "";
+        private string connectionString;
+        private MySqlConnection connection;
+
         public Login()
         {
             InitializeComponent();
             MakeInitialConnection();
         }
 
-        private void exitButton_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
         private void MakeInitialConnection()
         {
-            //Setup database
-            connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-            //Makes connection
-            Connection = new MySqlConnection(connectionString);
-            //Opens connection
-            Connection.Open();
+            // Build connection string
+            connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + username + ";" + "Password=" + password;
+            // Create connection object
+            connection = new MySqlConnection(connectionString);
+            // Open connection
+            connection.Open();
 
-            if (Connection.State == ConnectionState.Open)
+            // Check if connection is open
+            if (connection.State == ConnectionState.Open)
             {
-                MessageBox.Show("Connected!");
-                Connection.Close();
+                connection.Close();
             }
             else
+            {
                 MessageBox.Show("Connection Error");
-
+            }
         }
 
-        private void label1_Click(object sender, EventArgs e)
+        private async void pictureBox1_Click(object sender, EventArgs e)
         {
+            // Get entered username and password
+            string username = textBoxUsername.Text.Trim();
+            string password = textBoxPassword.Text.Trim();
 
-        }
-
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            string USERNAME;
-            string PASSWORD;
-            int LoginFlag = 0;
-            if (Connection.State != ConnectionState.Open)
+            // Check if either field is empty
+            if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
             {
-                //Setup db
-                connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-                //Makes connection
-                Connection = new MySqlConnection(connectionString);
-                //Opens connection
-                Connection.Open();
-                MessageBox.Show("Now running!");
-
+                MessageBox.Show("Please enter a username and password.");
+                return;
             }
-            else
-            {
-                MessageBox.Show("CLOSED!");
-            }
-            try
-            {
-                //Initialises the Command
-                MySqlCommand cmd = Connection.CreateCommand();
-                //SQL query
-                cmd.CommandText = "SELECT * FROM Staff";
-                //initialises the Reader
-                MySqlDataReader reader = cmd.ExecuteReader();
 
-                //READS IN THE ENTIRE DB
-                while (reader.Read())
-                {
-                    USERNAME = reader.GetString("LogUserName");
-                    PASSWORD = reader.GetString("LogPassword");
-
-                    //Need to use a flag otherwise (due to the while), the message is shown for all rows.
-                    if ((textBoxUsername.Text == USERNAME) & (textBoxPassword.Text == PASSWORD))
-                        LoginFlag = 1;
-                }
-
-                if (LoginFlag == 1)
-                {
-                    MessageBox.Show("Logged in Successfully");   
-                    //opens and shows the main menu form
-                    MainMenu thirdForm = new MainMenu();
-                    this.Hide();
-                    thirdForm.Show();
-                }
-                else
-                {
-                    MessageBox.Show("(Username/Password) Incorrect!");
-                    textBoxUsername.Text = "";
-                    textBoxPassword.Text = "";
-                }
-            }
-            catch (Exception)
+            // Build connection string using entered username and password
+            var connectionStringBuilder = new MySqlConnectionStringBuilder
             {
-                throw;
-            }
-            finally
-            {
-                if (Connection.State == ConnectionState.Open)
-                {
-                    Connection.Close();
-                }
+                Server = server,
+                Database = database,
+                UserID = username,
+                Password = password
+            };
 
+            using (var connection = new MySqlConnection(connectionStringBuilder.ConnectionString))
+            {
+                try
+                {
+                    // Open connection asynchronously
+                    await connection.OpenAsync();
+
+                    // Build SQL command to check username and password
+                    var command = new MySqlCommand("SELECT COUNT(*) FROM Staff WHERE LogUserName = @username AND LogPassword = @password", connection);
+                    command.Parameters.AddWithValue("@username", username);
+                    command.Parameters.AddWithValue("@password", password);
+
+                    // Execute command and get result count
+                    int count = Convert.ToInt32(await command.ExecuteScalarAsync());
+                    if (count > 0)
+                    {
+                        MessageBox.Show("Logged in successfully.");
+                        MainMenu thirdForm = new MainMenu();
+                        this.Hide();
+                        thirdForm.Show();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Invalid username or password.");
+                        textBoxPassword.Clear();
+                    }
+                }
+                catch (MySqlException ex)
+                {
+                    MessageBox.Show($"An error occurred: {ex.Message}");
+                }
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
+            // Initialize flag variable to track login success
+            int loginFlag = 0;
 
-            string USERNAME;
-            string PASSWORD;
-            int LoginFlag = 0;
-            if (Connection.State != ConnectionState.Open)
-            {
-                //Setup db
-                connectionString = @"Data Source=" + server + ";Initial Catalog=" + database + ";User ID=" + UserName + ";" + "Password=" + Password;
-                //Makes connection
-                Connection = new MySqlConnection(connectionString);
-                //Opens connection
-                Connection.Open();
-                MessageBox.Show("Now Open!");
+            // Make initial database connection
+            MakeInitialConnection();
 
-            }
-            else
-            {
-                MessageBox.Show("CLOSED!");
-            }
             try
             {
-                //Initialises the Command
-                MySqlCommand cmd = Connection.CreateCommand();
-                //SQL query
-                cmd.CommandText = "SELECT * FROM Staff";
-                //initialises the Reader
+                // Create SQL command to check username and password
+                MySqlCommand cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT * FROM Staff WHERE LogUserName = @username AND LogPassword = @password";
+                cmd.Parameters.AddWithValue("@username", textBoxUsername.Text);
+                cmd.Parameters.AddWithValue("@password", textBoxPassword.Text);
+
+                // Execute SQL command and read results
                 MySqlDataReader reader = cmd.ExecuteReader();
 
-                //READS IN THE ENTIRE database
+                // Check if entered username and password match any records
                 while (reader.Read())
                 {
-                    USERNAME = reader.GetString("LogUserName");
-                    PASSWORD = reader.GetString("LogPassword");
-
-                    //Need to use a flag otherwise (due to the while), the message is shown for all rows.
-                    if ((textBoxUsername.Text == USERNAME) & (textBoxPassword.Text == PASSWORD))
-                        LoginFlag = 1;
+                    loginFlag = 1;
                 }
 
-                if (LoginFlag == 1)
+                // If successful, show staff management form and hide login form
+                if (loginFlag == 1)
                 {
                     MessageBox.Show("Logged in Successfully");
-                    //Hide Login Screen
-                    StaffManagement.Show();
-                    this.Hide();    
+                    StaffManagement staffManagementForm = new StaffManagement();
+                    staffManagementForm.Show();
+                    this.Hide();
                 }
+                // If unsuccessful, display error message and clear fields
                 else
                 {
-                    MessageBox.Show("(Username/Password) Incorrect!");
+                    MessageBox.Show("Invalid username or password.");
                     textBoxUsername.Text = "";
                     textBoxPassword.Text = "";
                 }
             }
             catch (Exception)
             {
-                throw;
+                MessageBox.Show("Username or password invalid");
             }
             finally
             {
-                if (Connection.State == ConnectionState.Open)
+                // Close connection if it is open
+                if (connection.State == ConnectionState.Open)
                 {
-                    Connection.Close();
+                    connection.Close();
                 }
-
             }
         }
 
         private void ExitBTN_Click(object sender, EventArgs e)
         {
+            // Exit application
             Application.Exit();
         }
     }

@@ -3,8 +3,8 @@
   <Import Project="..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props" Condition="Exists('..\packages\Costura.Fody.3.3.3\build\Costura.Fody.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-	  <LangVersion>8.0</LangVersion>
-	  <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <LangVersion>8.0</LangVersion>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{0373187F-5412-4DF2-BACA-3B5A0179149B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
@@ -278,11 +278,11 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RoomManagement.cs">
+    <Compile Include="Reservations Management.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="RoomManagement.Designer.cs">
-      <DependentUpon>RoomManagement.cs</DependentUpon>
+    <Compile Include="Reservations Management.Designer.cs">
+      <DependentUpon>Reservations Management.cs</DependentUpon>
     </Compile>
     <Compile Include="StaffManagement.cs">
       <SubType>Form</SubType>
@@ -309,8 +309,8 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="RoomManagement.resx">
-      <DependentUpon>RoomManagement.cs</DependentUpon>
+    <EmbeddedResource Include="Reservations Management.resx">
+      <DependentUpon>Reservations Management.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="StaffManagement.resx">
       <DependentUpon>StaffManagement.cs</DependentUpon>
