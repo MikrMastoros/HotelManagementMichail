@@ -48,23 +48,6 @@ namespace HotelManagementMike
             }
         }
 
-        private void staffManagementButton_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                using (var staffManagementForm = new StaffManagement())
-                {
-                    StaffManagement secondForm = new StaffManagement();
-                    this.Dispose();
-                    secondForm.Show(); staffManagementForm.Show();
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Error creating staff management form: {ex.Message}");
-            }
-        }
-
         private void exitButton_Click(object sender, EventArgs e)
         {
             Application.Exit();

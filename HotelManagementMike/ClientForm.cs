@@ -46,15 +46,22 @@ namespace HotelManagementMike
 
         private void RefreshDataGridView()
         {
-            using (Connection = new MySqlConnection(connectionString))
+            try
             {
-                Connection.Open();
-                MySqlCommand cmd = Connection.CreateCommand();
-                cmd.CommandText = "SELECT Clients.*, RESERVATIONS.ReservationID FROM Clients JOIN RESERVATIONS ON Clients.ClientID = RESERVATIONS.ClientID";
-                MySqlDataAdapter adap = new MySqlDataAdapter(cmd);
-                DataSet ds = new DataSet();
-                adap.Fill(ds);
-                dataGridView1.DataSource = ds.Tables[0].DefaultView;
+                using (Connection = new MySqlConnection(connectionString))
+                {
+                    Connection.Open();
+                    MySqlCommand cmd = Connection.CreateCommand();
+                    cmd.CommandText = "SELECT CLIENTS.ClientID, RESERVATIONS.ReservationID, CLIENTS.FirstName, CLIENTS.LastName, CLIENTS.RoomID, CLIENTS.Mobile, RESERVATIONS.CheckInDate, RESERVATIONS.CheckOutDate FROM CLIENTS LEFT JOIN RESERVATIONS ON RESERVATIONS.ClientID = CLIENTS.ClientID;";
+                    MySqlDataAdapter adap = new MySqlDataAdapter(cmd);
+                    DataSet ds = new DataSet();
+                    adap.Fill(ds);
+                    dataGridView1.DataSource = ds.Tables[0].DefaultView;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -64,10 +71,10 @@ namespace HotelManagementMike
             if (e.RowIndex >= 0)
             {
                 dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-                NameBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                LastNameBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                RoomBox.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                MobileBox.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                NameBox.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
+                LastNameBox.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
+                RoomBox.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
+                MobileBox.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
             }
         }
 
@@ -90,7 +97,7 @@ namespace HotelManagementMike
                 }
 
                 // Set the query to insert a client
-                string insertClientQuery = "INSERT INTO Clients (FirstName, LastName, RoomNumber, Mobile) VALUES (@FirstName, @LastName, @RoomNumber, @Mobile); SELECT LAST_INSERT_ID();";
+                string insertClientQuery = "INSERT INTO Clients (FirstName, LastName, RoomID, Mobile) VALUES (@FirstName, @LastName, @RoomID, @Mobile);";
 
                 // Set up connection to write to DB
                 using MySqlConnection connection = new MySqlConnection(connectionString);
@@ -99,13 +106,14 @@ namespace HotelManagementMike
                     MySqlCommand insertClientCommand = new MySqlCommand(insertClientQuery, connection);
                     insertClientCommand.Parameters.AddWithValue("@FirstName", NameBox.Text);
                     insertClientCommand.Parameters.AddWithValue("@LastName", LastNameBox.Text);
-                    insertClientCommand.Parameters.AddWithValue("@RoomNumber", RoomBox.Text);
+                    insertClientCommand.Parameters.AddWithValue("@RoomID", RoomBox.Text);
                     insertClientCommand.Parameters.AddWithValue("@Mobile", MobileBox.Text);
                     connection.Open();
                     int clientId = Convert.ToInt32(insertClientCommand.ExecuteScalar());                
                 }
+                MessageBox.Show("Record added sucessfully");
                 RefreshDataGridView();
-            }
+            } 
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);

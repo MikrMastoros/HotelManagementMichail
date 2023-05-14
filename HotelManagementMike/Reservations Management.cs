@@ -55,7 +55,7 @@ namespace HotelManagementMike
                 Connection.Open();
 
                 MySqlCommand cmd = Connection.CreateCommand();
-                cmd.CommandText = "SELECT RESERVATIONS.*, CLIENTS.FirstName, CLIENTS.LastName, CLIENTS.Mobile, CLIENTS.RoomNumber FROM RESERVATIONS JOIN CLIENTS ON RESERVATIONS.ClientID = CLIENTS.ClientID";
+                cmd.CommandText = "SELECT RESERVATIONS.*, CLIENTS.FirstName, CLIENTS.LastName, CLIENTS.Mobile, CLIENTS.RoomID FROM RESERVATIONS JOIN CLIENTS ON RESERVATIONS.ClientID = CLIENTS.ClientID";
                 MySqlDataAdapter adap = new MySqlDataAdapter(cmd);
                 DataSet ds = new DataSet();
                 adap.Fill(ds);
@@ -79,7 +79,7 @@ namespace HotelManagementMike
                 string connectionString = $"Data Source={server};Initial Catalog={database};User ID={UserName};Password={Password}";
 
                 // Set the query to insert a client
-                string insertClientQuery = "INSERT INTO HotelMike.CLIENTS (FirstName, LastName, RoomNumber, Mobile) VALUES (@FirstName, @LastName, @RoomNumber, @Mobile); SELECT LAST_INSERT_ID();";
+                string insertClientQuery = "INSERT INTO HotelMike.CLIENTS (FirstName, LastName, RoomID, Mobile) VALUES (@FirstName, @LastName, @RoomID, @Mobile); SELECT LAST_INSERT_ID();";
 
                 // Set the query to write
                 string insertReservationQuery = "INSERT INTO HotelMike.RESERVATIONS (ClientID, CHECKINDATE, CHECKOUTDATE) VALUES (@ClientID, @CheckInDate, @CheckOutDate)";
@@ -91,7 +91,7 @@ namespace HotelManagementMike
                     MySqlCommand insertClientCommand = new MySqlCommand(insertClientQuery, connection);
                     insertClientCommand.Parameters.AddWithValue("@FirstName", FirstNameBox.Text);
                     insertClientCommand.Parameters.AddWithValue("@LastName", LastNameBox.Text);
-                    insertClientCommand.Parameters.AddWithValue("@RoomNumber", RoomNBox.Text);
+                    insertClientCommand.Parameters.AddWithValue("@RoomID", RoomNBox.Text);
                     insertClientCommand.Parameters.AddWithValue("@Mobile", PhoneBox.Text);
                     connection.Open();
                     int clientId = Convert.ToInt32(insertClientCommand.ExecuteScalar());
@@ -104,7 +104,7 @@ namespace HotelManagementMike
                     insertReservationCommand.ExecuteNonQuery();
                     MessageBox.Show("Reservation Created Successfully");
                     // Read in data
-                    using MySqlCommand cmd = new MySqlCommand("SELECT CLIENTS.FirstName, CLIENTS.LastName, CLIENTS.Mobile, RESERVATIONS.CHECKINDATE, RESERVATIONS.CHECKOUTDATE, CLIENTS.RoomNumber FROM RESERVATIONS JOIN CLIENTS ON RESERVATIONS.ClientID = CLIENTS.ClientID", connection);
+                    using MySqlCommand cmd = new MySqlCommand("SELECT CLIENTS.FirstName, CLIENTS.LastName, CLIENTS.Mobile, RESERVATIONS.CHECKINDATE, RESERVATIONS.CHECKOUTDATE, CLIENTS.RoomID FROM RESERVATIONS JOIN CLIENTS ON RESERVATIONS.ClientID = CLIENTS.ClientID", connection);
                     using MySqlDataAdapter adapter = new MySqlDataAdapter(cmd);
                     using DataSet dataSet = new DataSet();
                     adapter.Fill(dataSet);

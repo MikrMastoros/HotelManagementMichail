@@ -163,7 +163,7 @@
             this.dateTimePicker1.Name = "dateTimePicker1";
             this.dateTimePicker1.Size = new System.Drawing.Size(265, 22);
             this.dateTimePicker1.TabIndex = 29;
-            this.dateTimePicker1.Value = new System.DateTime(2023, 12, 25, 23, 59, 59, 0);
+            this.dateTimePicker1.Value = new System.DateTime(2023, 5, 10, 0, 0, 0, 0);
             // 
             // dateTimePicker2
             // 
@@ -173,6 +173,7 @@
             this.dateTimePicker2.Name = "dateTimePicker2";
             this.dateTimePicker2.Size = new System.Drawing.Size(265, 22);
             this.dateTimePicker2.TabIndex = 30;
+            this.dateTimePicker2.Value = new System.DateTime(2023, 5, 10, 19, 28, 26, 0);
             // 
             // label1
             // 
@@ -222,6 +223,7 @@
             // 
             // PhoneBox
             // 
+            this.PhoneBox.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.PhoneBox.Location = new System.Drawing.Point(569, 81);
             this.PhoneBox.Name = "PhoneBox";
             this.PhoneBox.Size = new System.Drawing.Size(100, 22);
@@ -229,6 +231,7 @@
             // 
             // label6
             // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.Top;
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(464, 84);
             this.label6.Name = "label6";
@@ -263,7 +266,7 @@
             this.Controls.Add(this.button3);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "ReservationsManagement";
-            this.Text = "RoomManagement";
+            this.Text = "Reservation Management";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.ReservationsManagement_Load);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
