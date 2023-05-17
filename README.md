@@ -7,3 +7,4 @@ To Use:
 4. Connect Toad by clicking connect/ default credentials(can be changed in code)
 5. Run code in VS 
 6. Project is now running
+**You shall install MySQL.Data in Nupackages in visual studio in order for it to work.
